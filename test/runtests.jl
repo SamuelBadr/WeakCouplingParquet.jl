@@ -112,10 +112,10 @@ end
     reltol = 1e-5
 
     @testset "phi" begin
-        @time val_d, err_d = WCP.phi2_d(u, mu, beta, v, vp, w, k, kp, q; abstol, reltol)
-        @time val_m, err_m = WCP.phi2_m(u, mu, beta, v, vp, w, k, kp, q; abstol, reltol)
-        @time val_s, err_s = WCP.phi2_s(u, mu, beta, v, vp, w, k, kp, q; abstol, reltol)
-        @time val_t, err_t = WCP.phi2_t(u, mu, beta, v, vp, w, k, kp, q; abstol, reltol)
+        val_d, err_d = WCP.phi2_d(u, mu, beta, v, vp, w, k, kp, q; abstol, reltol)
+        val_m, err_m = WCP.phi2_m(u, mu, beta, v, vp, w, k, kp, q; abstol, reltol)
+        val_s, err_s = WCP.phi2_s(u, mu, beta, v, vp, w, k, kp, q; abstol, reltol)
+        val_t, err_t = WCP.phi2_t(u, mu, beta, v, vp, w, k, kp, q; abstol, reltol)
 
         for part in (real, imag)
             @test abs(part(err_d)) < max(abstol, reltol * abs(part(val_d)))
@@ -127,10 +127,10 @@ end
     end
 
     @testset "full" begin
-        @time val_d, err_d = WCP.full2_d(u, mu, beta, v, vp, w, k, kp, q; abstol, reltol)
-        @time val_m, err_m = WCP.full2_m(u, mu, beta, v, vp, w, k, kp, q; abstol, reltol)
-        @time val_s, err_s = WCP.full2_s(u, mu, beta, v, vp, w, k, kp, q; abstol, reltol)
-        @time val_t, err_t = WCP.full2_t(u, mu, beta, v, vp, w, k, kp, q; abstol, reltol)
+        val_d, err_d = WCP.full2_d(u, mu, beta, v, vp, w, k, kp, q; abstol, reltol)
+        val_m, err_m = WCP.full2_m(u, mu, beta, v, vp, w, k, kp, q; abstol, reltol)
+        val_s, err_s = WCP.full2_s(u, mu, beta, v, vp, w, k, kp, q; abstol, reltol)
+        val_t, err_t = WCP.full2_t(u, mu, beta, v, vp, w, k, kp, q; abstol, reltol)
 
         for part in (real, imag)
             @test abs(part(err_d)) < max(abstol, reltol * abs(part(val_d)))
@@ -142,10 +142,10 @@ end
     end
 
     @testset "gamma" begin
-        @time val_d, err_d = WCP.gamma2_d(u, mu, beta, v, vp, w, k, kp, q; abstol, reltol)
-        @time val_m, err_m = WCP.gamma2_m(u, mu, beta, v, vp, w, k, kp, q; abstol, reltol)
-        @time val_s, err_s = WCP.gamma2_s(u, mu, beta, v, vp, w, k, kp, q; abstol, reltol)
-        @time val_t, err_t = WCP.gamma2_t(u, mu, beta, v, vp, w, k, kp, q; abstol, reltol)
+        val_d, err_d = WCP.gamma2_d(u, mu, beta, v, vp, w, k, kp, q; abstol, reltol)
+        val_m, err_m = WCP.gamma2_m(u, mu, beta, v, vp, w, k, kp, q; abstol, reltol)
+        val_s, err_s = WCP.gamma2_s(u, mu, beta, v, vp, w, k, kp, q; abstol, reltol)
+        val_t, err_t = WCP.gamma2_t(u, mu, beta, v, vp, w, k, kp, q; abstol, reltol)
 
         for part in (real, imag)
             @test abs(part(err_d)) < max(abstol, reltol * abs(part(val_d)))

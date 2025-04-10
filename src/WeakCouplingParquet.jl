@@ -3,12 +3,8 @@ module WeakCouplingParquet
 using MathLink
 using JuliaFormatter
 using StaticArrays
-using HCubature
 using Cubature
 using Integrals
-using FastGaussQuadrature
-using MCIntegration
-using Cuba
 
 disp(k::AbstractVector) = -2 * sum(cospi, k)
 
