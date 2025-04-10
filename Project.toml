@@ -1,0 +1,18 @@
+name = "WeakCouplingParquet"
+uuid = "62b8c3c3-4004-406c-9797-34cb1d81b562"
+authors = ["Samuel Badr <samuel.badr@gmail.com>"]
+version = "0.1.0"
+
+[deps]
+Cubature = "667455a9-e2ce-5579-9412-b964f529a492"
+Integrals = "de52edbc-65ea-441a-8357-d3a637375a31"
+JuliaFormatter = "98e50ef6-434e-11e9-1051-2b60c6c9e899"
+MathLink = "18c93696-a329-5786-9845-8443133fa0b4"
+StaticArrays = "90137ffa-7385-5640-81b9-e52037218182"
+
+[compat]
+Cubature = "1.5.1"
+Integrals = "4.5.0"
+JuliaFormatter = "2.1.0"
+MathLink = "0.6.1"
+StaticArrays = "1.9.13"
