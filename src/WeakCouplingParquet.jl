@@ -6,10 +6,11 @@ using StaticArrays
 using Cubature
 using Integrals
 
-disp(k::AbstractVector) = -2 * sum(cospi, k)
+@inline disp(k::AbstractVector) = -2 * sum(cospi, k)
+@inline disp(k::SVector{0}) = 0.0
 
-fermidist(x::Number, beta::Number) = 1 / (exp(beta * x) + 1)
-bosedist(x::Number, beta::Number) = 1 / (exp(beta * x) - 1)
+@inline fermidist(x::Number, beta::Number) = 1 / (exp(beta * x) + 1)
+@inline bosedist(x::Number, beta::Number) = 1 / (exp(beta * x) - 1)
 
 function make_julia_function(wolfram_path, out_path, function_name)
     wolfram_expr_string = read(wolfram_path, String)
@@ -18,8 +19,10 @@ function make_julia_function(wolfram_path, out_path, function_name)
     expr = replace(string(expr), "+ -1 *" => "-", "-1 * " => "-", "+ -1" => "- ")
     signature = if occursin("k2", expr) && occursin("k3", expr)
         "(u, mu, beta, v, vp, w, k::SVector, kp::SVector, q::SVector, k1::SVector, k2::SVector, k3::SVector)"
-    else
+    elseif occursin("k1", expr)
         "(u, mu, beta, v, vp, w, k::SVector, kp::SVector, q::SVector, k1::SVector)"
+    else
+        "(u, mu, beta, v, vp, w)"
     end
     function_string = """
     function $(function_name)$(signature)
@@ -31,16 +34,22 @@ function make_julia_function(wolfram_path, out_path, function_name)
     return out_path
 end
 
-wolfram_expr_dir = joinpath(@__DIR__, "wolfram_expressions")
-julia_expr_dir = joinpath(@__DIR__, "julia_expressions")
+const wolfram_expr_dir = joinpath(@__DIR__, "wolfram_expressions")
+const julia_function_dir = joinpath(@__DIR__, "julia_expressions")
+if !isdir(julia_function_dir)
+    mkpath(julia_function_dir)
+end
+
+# Generate Julia functions from Wolfram expressions
 for in_file in readdir(wolfram_expr_dir)
     fun_name = splitext(in_file)[1]
     out_file = "$(fun_name).jl"
     wolfram_path = joinpath(wolfram_expr_dir, in_file)
-    julia_path = joinpath(julia_expr_dir, out_file)
+    julia_path = joinpath(julia_function_dir, out_file)
     make_julia_function(wolfram_path, julia_path, fun_name)
-    include(julia_path)
 end
+
+foreach(include, readdir(julia_function_dir; join=true))
 
 for fun in (:phi2_d, :phi2_m, :phi2_s, :phi2_t)
     @eval function $(fun)(dx, x, p)
@@ -64,7 +73,7 @@ for fun in (:phi2_d, :phi2_m, :phi2_s, :phi2_t)
                 end
                 # if the integrand blows up, slightly
                 # perturb kp until it doesn't
-                kp = kp + 0.0000001 * @SVector randn(dim)
+                kp = kp + 1e-8 * @SVector randn(dim)
             end
         end
     end
@@ -121,6 +130,13 @@ for fun in (:full2_d, :full2_m, :full2_s, :full2_t, :gamma2_d, :gamma2_m, :gamma
         result = sol.u[1] + im * sol.u[2]
         residuum = sol.resid[1] + im * sol.resid[2]
         return result, residuum
+    end
+end
+
+for fun in (:phi2_d, :phi2_m, :phi2_s, :phi2_t, :full2_d, :full2_m, :full2_s, :full2_t, :gamma2_d, :gamma2_m, :gamma2_s, :gamma2_t)
+    str_fun = string(fun)
+    @eval function $(fun)(u, mu, beta, v, vp, w)
+        $(Symbol(str_fun[begin:end-1], "0D_", str_fun[end]))(u, mu, beta, v, vp, w)
     end
 end
 

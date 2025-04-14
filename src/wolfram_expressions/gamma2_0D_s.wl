@@ -1,0 +1,1 @@
+(u*(u*(2*v - w)*fermidist[-mu, beta] - u*(v + vp - w)*fermidist[-mu + v - vp, beta] + (v - vp)*(2*(v + vp - w) - u*fermidist[-mu + v + vp - w, beta])))/((v - vp)*(v + vp - w))

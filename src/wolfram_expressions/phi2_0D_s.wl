@@ -1,0 +1,1 @@
+(-2*u^2*(fermidist[-mu, beta] - fermidist[mu, beta])*(2*mu + w - u*fermidist[-mu, beta] + u*fermidist[mu, beta]))/(2*mu + w)^2

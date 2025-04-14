@@ -1,0 +1,1 @@
+(u^3*(bosedist[-2*mu, beta] + fermidist[-mu, beta])*(fermidist[-mu, beta] - fermidist[mu, beta])*(2*mu^2 + 2*mu*v + v^2 + 2*mu*vp + vp^2 + 2*mu*w + v*w + vp*w - u*(2*mu + v + vp + w)*fermidist[-mu, beta] + u*(2*mu + v + vp + w)*fermidist[mu, beta]))/((mu + v)*(mu + vp)*(mu + v + w)*(mu + vp + w))
