@@ -13,20 +13,21 @@ function phi2_t(
     k3::SVector,
 )
     cnorm = 1 / (2pi)^length(k)
-    cnorm * (
-        (
-            cnorm ^ 2 *
+    (
+        cnorm ^ 3 * (
             fermidist(-1mu + disp(k1), beta) *
             (
                 ifelse(
                     and(iszero(mu + vp - disp(k1)), iszero(-1k1 + kp)),
                     -(u ^ 2 * dfermidist(-1mu + disp(k3), beta)),
-                    (
-                        u ^ 2 * (
-                            fermidist(-1mu + disp(k3), beta) -
-                            fermidist(-1mu + disp(-1k1 + k3 + kp), beta)
-                        )
-                    ) * (-1mu - vp + disp(k1) - disp(k3) + disp(-1k1 + k3 + kp)) ^ -1,
+                    -(
+                        (
+                            u ^ 2 * (
+                                fermidist(-1mu + disp(k3), beta) -
+                                fermidist(-1mu + disp(-1k1 + k3 + kp), beta)
+                            )
+                        ) * (mu + vp - disp(k1) + disp(k3) - disp(-1k1 + k3 + kp)) ^ -1
+                    ),
                 ) + ifelse(
                     and(iszero(mu - vp + w - disp(k1)), iszero(-1k1 - kp + q)),
                     u ^ 2 * dfermidist(-1mu + disp(k3), beta),
@@ -59,10 +60,7 @@ function phi2_t(
                         )
                     ) * (mu + v - disp(k1) - disp(k2) + disp(-1k + k1 + k2)) ^ -1,
                 )
-            )
-        ) * (2 * (2mu + w - disp(k1) - disp(-1k1 + q))) ^ -1 - (
-            (
-                cnorm ^ 2 *
+            ) - (
                 fermidist(mu - disp(-1k1 + q), beta) *
                 (
                     ifelse(
@@ -113,7 +111,7 @@ function phi2_t(
                         -1,
                     )
                 )
-            ) * (2 * (2mu + w - disp(k1) - disp(-1k1 + q))) ^ -1
+            )
         )
-    )
+    ) * (2 * (2mu + w - disp(k1) - disp(-1k1 + q))) ^ -1
 end

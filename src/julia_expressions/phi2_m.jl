@@ -14,28 +14,31 @@ function phi2_m(
 )
     cnorm = 1 / (2pi)^length(k)
     cnorm * (
-        (
-            u *
+        -(
             (
-                -1v + vp + disp(k2) - disp(k3) + disp(k + k1 - k2 + q) -
-                disp(k1 - k3 + kp + q) + cnorm * u * fermidist(-1mu + disp(k2), beta) -
-                (cnorm * u * fermidist(mu - disp(k + k1 - k2 + q), beta))
+                cnorm *
+                u ^ 3 *
+                (
+                    -1v + vp + disp(k2) - disp(k3) + disp(k + k1 - k2 + q) -
+                    disp(k1 - k3 + kp + q) + cnorm * u * fermidist(-1mu + disp(k2), beta) -
+                    (cnorm * u * fermidist(mu - disp(k + k1 - k2 + q), beta))
+                ) *
+                (
+                    fermidist(-1mu + disp(k3), beta) -
+                    fermidist(mu - disp(k1 - k3 + kp + q), beta)
+                ) *
+                fermidist(-2mu + disp(k3) + disp(k1 - k3 + kp + q), beta)
             ) *
             (
-                cnorm * u ^ 2 * fermidist(-1mu + disp(k3), beta) -
-                (cnorm * u ^ 2 * fermidist(mu - disp(k1 - k3 + kp + q), beta))
-            ) *
-            fermidist(-2mu + disp(k3) + disp(k1 - k3 + kp + q), beta)
-        ) *
-        (
-            (mu + vp + w + disp(k1) - disp(k3) - disp(k1 - k3 + kp + q)) *
-            (mu + vp - disp(k3) + disp(k1 + q) - disp(k1 - k3 + kp + q)) *
-            (
-                -1v + vp + disp(k2) - disp(k3) + disp(k + k1 - k2 + q) -
-                disp(k1 - k3 + kp + q)
-            ) *
-            (1 - (2 * fermidist(-2mu + disp(k3) + disp(k1 - k3 + kp + q), beta)))
-        ) ^ -1 +
+                (mu + vp + w + disp(k1) - disp(k3) - disp(k1 - k3 + kp + q)) *
+                (mu + vp - disp(k3) + disp(k1 + q) - disp(k1 - k3 + kp + q)) *
+                (
+                    -1v + vp + disp(k2) - disp(k3) + disp(k + k1 - k2 + q) -
+                    disp(k1 - k3 + kp + q)
+                ) *
+                (-1 + 2 * fermidist(-2mu + disp(k3) + disp(k1 - k3 + kp + q), beta))
+            ) ^ -1
+        ) +
         (
             u *
             fermidist(-1mu + disp(k1), beta) *
@@ -47,8 +50,7 @@ function phi2_m(
                 (cnorm * u * fermidist(mu - disp(k + k1 - k2 + q), beta))
             ) *
             (
-                -(mu * u) - (u * vp) - (u * w) - (u * disp(k1)) +
-                u * disp(k3) +
+                -(mu * u) - (u * vp) - (u * w) +
                 u * disp(k1 - k3 + kp + q) +
                 cnorm * u ^ 2 * fermidist(-1mu + disp(k3), beta) -
                 (cnorm * u ^ 2 * fermidist(mu - disp(k1 - k3 + kp + q), beta)) +
@@ -87,21 +89,9 @@ function phi2_m(
                             fermidist(-1mu + disp(k3 + q), beta)
                         )
                     ) * (w + disp(k3) - disp(k3 + q)) ^ -1,
-                ) +
-                cnorm *
-                disp(k1) *
-                ifelse(
-                    and(iszero(w), iszero(q)),
-                    u ^ 2 * dfermidist(-1mu + disp(k3), beta),
-                    (
-                        u ^ 2 * (
-                            fermidist(-1mu + disp(k3), beta) -
-                            fermidist(-1mu + disp(k3 + q), beta)
-                        )
-                    ) * (w + disp(k3) - disp(k3 + q)) ^ -1,
                 ) - (
                     cnorm *
-                    disp(k3) *
+                    disp(k1 - k3 + kp + q) *
                     ifelse(
                         and(iszero(w), iszero(q)),
                         u ^ 2 * dfermidist(-1mu + disp(k3), beta),
@@ -112,10 +102,24 @@ function phi2_m(
                             )
                         ) * (w + disp(k3) - disp(k3 + q)) ^ -1,
                     )
-                ) - (
-                    cnorm *
-                    disp(k1 - k3 + kp + q) *
-                    ifelse(
+                ) +
+                disp(k3) * (
+                    u - (
+                        cnorm * ifelse(
+                            and(iszero(w), iszero(q)),
+                            u ^ 2 * dfermidist(-1mu + disp(k3), beta),
+                            (
+                                u ^ 2 * (
+                                    fermidist(-1mu + disp(k3), beta) -
+                                    fermidist(-1mu + disp(k3 + q), beta)
+                                )
+                            ) * (w + disp(k3) - disp(k3 + q)) ^ -1,
+                        )
+                    )
+                ) +
+                disp(k1) * (
+                    -1u +
+                    cnorm * ifelse(
                         and(iszero(w), iszero(q)),
                         u ^ 2 * dfermidist(-1mu + disp(k3), beta),
                         (
@@ -134,6 +138,108 @@ function phi2_m(
             (mu + vp + w + disp(k1) - disp(k3) - disp(k1 - k3 + kp + q))
         ) ^ -1 - (
             (
+                cnorm *
+                u ^ 2 *
+                (
+                    fermidist(-1mu + disp(k2), beta) -
+                    fermidist(mu - disp(k + k1 - k2 + q), beta)
+                ) *
+                fermidist(-2mu + disp(k2) + disp(k + k1 - k2 + q), beta) *
+                (
+                    u * v - (u * vp) - (u * disp(k + k1 - k2 + q)) +
+                    u * disp(k1 - k3 + kp + q) +
+                    cnorm * u ^ 2 * fermidist(-1mu + disp(k3), beta) -
+                    (cnorm * u ^ 2 * fermidist(mu - disp(k1 - k3 + kp + q), beta)) - (
+                        cnorm *
+                        v *
+                        ifelse(
+                            and(iszero(w), iszero(q)),
+                            u ^ 2 * dfermidist(-1mu + disp(k3), beta),
+                            (
+                                u ^ 2 * (
+                                    fermidist(-1mu + disp(k3), beta) -
+                                    fermidist(-1mu + disp(k3 + q), beta)
+                                )
+                            ) * (w + disp(k3) - disp(k3 + q)) ^ -1,
+                        )
+                    ) +
+                    cnorm *
+                    vp *
+                    ifelse(
+                        and(iszero(w), iszero(q)),
+                        u ^ 2 * dfermidist(-1mu + disp(k3), beta),
+                        (
+                            u ^ 2 * (
+                                fermidist(-1mu + disp(k3), beta) -
+                                fermidist(-1mu + disp(k3 + q), beta)
+                            )
+                        ) * (w + disp(k3) - disp(k3 + q)) ^ -1,
+                    ) +
+                    cnorm *
+                    disp(k + k1 - k2 + q) *
+                    ifelse(
+                        and(iszero(w), iszero(q)),
+                        u ^ 2 * dfermidist(-1mu + disp(k3), beta),
+                        (
+                            u ^ 2 * (
+                                fermidist(-1mu + disp(k3), beta) -
+                                fermidist(-1mu + disp(k3 + q), beta)
+                            )
+                        ) * (w + disp(k3) - disp(k3 + q)) ^ -1,
+                    ) - (
+                        cnorm *
+                        disp(k1 - k3 + kp + q) *
+                        ifelse(
+                            and(iszero(w), iszero(q)),
+                            u ^ 2 * dfermidist(-1mu + disp(k3), beta),
+                            (
+                                u ^ 2 * (
+                                    fermidist(-1mu + disp(k3), beta) -
+                                    fermidist(-1mu + disp(k3 + q), beta)
+                                )
+                            ) * (w + disp(k3) - disp(k3 + q)) ^ -1,
+                        )
+                    ) +
+                    disp(k3) * (
+                        u - (
+                            cnorm * ifelse(
+                                and(iszero(w), iszero(q)),
+                                u ^ 2 * dfermidist(-1mu + disp(k3), beta),
+                                (
+                                    u ^ 2 * (
+                                        fermidist(-1mu + disp(k3), beta) -
+                                        fermidist(-1mu + disp(k3 + q), beta)
+                                    )
+                                ) * (w + disp(k3) - disp(k3 + q)) ^ -1,
+                            )
+                        )
+                    ) +
+                    disp(k2) * (
+                        -1u +
+                        cnorm * ifelse(
+                            and(iszero(w), iszero(q)),
+                            u ^ 2 * dfermidist(-1mu + disp(k3), beta),
+                            (
+                                u ^ 2 * (
+                                    fermidist(-1mu + disp(k3), beta) -
+                                    fermidist(-1mu + disp(k3 + q), beta)
+                                )
+                            ) * (w + disp(k3) - disp(k3 + q)) ^ -1,
+                        )
+                    )
+                )
+            ) *
+            (
+                (mu + v + w + disp(k1) - disp(k2) - disp(k + k1 - k2 + q)) *
+                (mu + v - disp(k2) + disp(k1 + q) - disp(k + k1 - k2 + q)) *
+                (
+                    v - vp - disp(k2) + disp(k3) - disp(k + k1 - k2 + q) +
+                    disp(k1 - k3 + kp + q)
+                ) *
+                (-1 + 2 * fermidist(-2mu + disp(k2) + disp(k + k1 - k2 + q), beta))
+            ) ^ -1
+        ) - (
+            (
                 u *
                 fermidist(-1mu + disp(k1 + q), beta) *
                 (
@@ -143,7 +249,7 @@ function phi2_m(
                     (cnorm * u * fermidist(mu - disp(k + k1 - k2 + q), beta))
                 ) *
                 (
-                    -(mu * u) - (u * vp) + u * disp(k3) - (u * disp(k1 + q)) +
+                    -(mu * u) - (u * vp) +
                     u * disp(k1 - k3 + kp + q) +
                     cnorm * u ^ 2 * fermidist(-1mu + disp(k3), beta) -
                     (cnorm * u ^ 2 * fermidist(mu - disp(k1 - k3 + kp + q), beta)) +
@@ -172,7 +278,7 @@ function phi2_m(
                         ) * (w + disp(k3) - disp(k3 + q)) ^ -1,
                     ) - (
                         cnorm *
-                        disp(k3) *
+                        disp(k1 - k3 + kp + q) *
                         ifelse(
                             and(iszero(w), iszero(q)),
                             u ^ 2 * dfermidist(-1mu + disp(k3), beta),
@@ -184,21 +290,23 @@ function phi2_m(
                             ) * (w + disp(k3) - disp(k3 + q)) ^ -1,
                         )
                     ) +
-                    cnorm *
-                    disp(k1 + q) *
-                    ifelse(
-                        and(iszero(w), iszero(q)),
-                        u ^ 2 * dfermidist(-1mu + disp(k3), beta),
-                        (
-                            u ^ 2 * (
-                                fermidist(-1mu + disp(k3), beta) -
-                                fermidist(-1mu + disp(k3 + q), beta)
+                    disp(k3) * (
+                        u - (
+                            cnorm * ifelse(
+                                and(iszero(w), iszero(q)),
+                                u ^ 2 * dfermidist(-1mu + disp(k3), beta),
+                                (
+                                    u ^ 2 * (
+                                        fermidist(-1mu + disp(k3), beta) -
+                                        fermidist(-1mu + disp(k3 + q), beta)
+                                    )
+                                ) * (w + disp(k3) - disp(k3 + q)) ^ -1,
                             )
-                        ) * (w + disp(k3) - disp(k3 + q)) ^ -1,
-                    ) - (
-                        cnorm *
-                        disp(k1 - k3 + kp + q) *
-                        ifelse(
+                        )
+                    ) +
+                    disp(k1 + q) * (
+                        -1u +
+                        cnorm * ifelse(
                             and(iszero(w), iszero(q)),
                             u ^ 2 * dfermidist(-1mu + disp(k3), beta),
                             (
@@ -216,105 +324,6 @@ function phi2_m(
                 (mu + v - disp(k2) + disp(k1 + q) - disp(k + k1 - k2 + q)) *
                 (mu + vp - disp(k3) + disp(k1 + q) - disp(k1 - k3 + kp + q))
             ) ^ -1
-        ) +
-        (
-            u *
-            (
-                cnorm * u * fermidist(-1mu + disp(k2), beta) -
-                (cnorm * u * fermidist(mu - disp(k + k1 - k2 + q), beta))
-            ) *
-            fermidist(-2mu + disp(k2) + disp(k + k1 - k2 + q), beta) *
-            (
-                u * v - (u * vp) - (u * disp(k2)) + u * disp(k3) -
-                (u * disp(k + k1 - k2 + q)) +
-                u * disp(k1 - k3 + kp + q) +
-                cnorm * u ^ 2 * fermidist(-1mu + disp(k3), beta) -
-                (cnorm * u ^ 2 * fermidist(mu - disp(k1 - k3 + kp + q), beta)) - (
-                    cnorm *
-                    v *
-                    ifelse(
-                        and(iszero(w), iszero(q)),
-                        u ^ 2 * dfermidist(-1mu + disp(k3), beta),
-                        (
-                            u ^ 2 * (
-                                fermidist(-1mu + disp(k3), beta) -
-                                fermidist(-1mu + disp(k3 + q), beta)
-                            )
-                        ) * (w + disp(k3) - disp(k3 + q)) ^ -1,
-                    )
-                ) +
-                cnorm *
-                vp *
-                ifelse(
-                    and(iszero(w), iszero(q)),
-                    u ^ 2 * dfermidist(-1mu + disp(k3), beta),
-                    (
-                        u ^ 2 * (
-                            fermidist(-1mu + disp(k3), beta) -
-                            fermidist(-1mu + disp(k3 + q), beta)
-                        )
-                    ) * (w + disp(k3) - disp(k3 + q)) ^ -1,
-                ) +
-                cnorm *
-                disp(k2) *
-                ifelse(
-                    and(iszero(w), iszero(q)),
-                    u ^ 2 * dfermidist(-1mu + disp(k3), beta),
-                    (
-                        u ^ 2 * (
-                            fermidist(-1mu + disp(k3), beta) -
-                            fermidist(-1mu + disp(k3 + q), beta)
-                        )
-                    ) * (w + disp(k3) - disp(k3 + q)) ^ -1,
-                ) - (
-                    cnorm *
-                    disp(k3) *
-                    ifelse(
-                        and(iszero(w), iszero(q)),
-                        u ^ 2 * dfermidist(-1mu + disp(k3), beta),
-                        (
-                            u ^ 2 * (
-                                fermidist(-1mu + disp(k3), beta) -
-                                fermidist(-1mu + disp(k3 + q), beta)
-                            )
-                        ) * (w + disp(k3) - disp(k3 + q)) ^ -1,
-                    )
-                ) +
-                cnorm *
-                disp(k + k1 - k2 + q) *
-                ifelse(
-                    and(iszero(w), iszero(q)),
-                    u ^ 2 * dfermidist(-1mu + disp(k3), beta),
-                    (
-                        u ^ 2 * (
-                            fermidist(-1mu + disp(k3), beta) -
-                            fermidist(-1mu + disp(k3 + q), beta)
-                        )
-                    ) * (w + disp(k3) - disp(k3 + q)) ^ -1,
-                ) - (
-                    cnorm *
-                    disp(k1 - k3 + kp + q) *
-                    ifelse(
-                        and(iszero(w), iszero(q)),
-                        u ^ 2 * dfermidist(-1mu + disp(k3), beta),
-                        (
-                            u ^ 2 * (
-                                fermidist(-1mu + disp(k3), beta) -
-                                fermidist(-1mu + disp(k3 + q), beta)
-                            )
-                        ) * (w + disp(k3) - disp(k3 + q)) ^ -1,
-                    )
-                )
-            )
-        ) *
-        (
-            (mu + v + w + disp(k1) - disp(k2) - disp(k + k1 - k2 + q)) *
-            (mu + v - disp(k2) + disp(k1 + q) - disp(k + k1 - k2 + q)) *
-            (
-                v - vp - disp(k2) + disp(k3) - disp(k + k1 - k2 + q) +
-                disp(k1 - k3 + kp + q)
-            ) *
-            (1 - (2 * fermidist(-2mu + disp(k2) + disp(k + k1 - k2 + q), beta)))
-        ) ^ -1
+        )
     )
 end

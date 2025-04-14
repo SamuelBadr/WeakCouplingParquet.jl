@@ -10,9 +10,9 @@ using Integrals
 @inline disp(k::SVector{0}) = 0.0
 
 @inline fermidist(x::Number, beta::Number) = 1 / (exp(beta * x) + 1)
-@inline dfermidist(x::Number, beta::Number) = complex(-0.25 * beta * sech((beta * x) / 2)^2)
-@inline and(x, b) = x && b
-# @inline bosedist(x::Number, beta::Number) = 1 / (exp(beta * x) - 1)
+# dfermidist(x, beta) == ∂ fermidist(x, beta) / ∂ x
+@inline dfermidist(x::Number, beta::Number) = complex(-0.25 * beta * sech(beta * x / 2)^2)
+@inline and(x, b) = x & b
 
 function make_julia_function(wolfram_path, out_path, function_name)
     wolfram_expr_string = read(wolfram_path, String)
@@ -40,10 +40,9 @@ function make_julia_function(wolfram_path, out_path, function_name)
     return out_path
 end
 
-const wolfram_expr_dir = joinpath(@__DIR__, "wolfram_expressions")
-const julia_function_dir = joinpath(@__DIR__, "julia_expressions")
-
 function make_julia_functions()
+    wolfram_expr_dir = joinpath(@__DIR__, "wolfram_expressions")
+    julia_function_dir = joinpath(@__DIR__, "julia_expressions")
     if !isdir(julia_function_dir)
         mkpath(julia_function_dir)
     end
@@ -68,7 +67,6 @@ for fun in (:phi2_d, :phi2_m, :phi2_s, :phi2_t)
         inds1 = inds .+ 0dim
         inds2 = inds .+ 1dim
         inds3 = inds .+ 2dim
-        # @show size(x, 2)
         @inbounds Threads.@threads for i in axes(x, 2)
             k1 = x[inds1, i]
             k2 = x[inds2, i]
@@ -100,7 +98,6 @@ for fun in (:full2_d, :full2_m, :full2_s, :full2_t, :gamma2_d, :gamma2_m, :gamma
         (; u, mu, beta, v, vp, w, k, kp, q) = p
         dim = length(k)
         inds = SVector(ntuple(identity, dim)...)
-        @show size(x) typeof(x)
         @inbounds Threads.@threads for i in axes(x, 2)
             k1 = x[inds, i]
             res = $(fun)(u, mu, beta, v, vp, w, k, kp, q, k1)
