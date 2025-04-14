@@ -1,1 +1,1 @@
--((u^2*((-2*vp + w)*fermidist[-mu, beta] + (v + vp - w)*fermidist[-mu + v - vp, beta] + (-v + vp)*fermidist[-mu + v + vp - w, beta]))/((v - vp)*(v + vp - w)))
+IfElse[IsZero[-v + vp], -(u^2*dfermidist[-mu, beta]), (u^2*(fermidist[-mu, beta] - fermidist[-mu + v - vp, beta]))/(v - vp)] + IfElse[IsZero[-v - vp + w], u^2*dfermidist[-mu, beta], (u^2*(-fermidist[-mu, beta] + fermidist[-mu + v + vp - w, beta]))/(v + vp - w)]

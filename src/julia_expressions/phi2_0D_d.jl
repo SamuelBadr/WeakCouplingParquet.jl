@@ -1,18 +1,74 @@
 function phi2_0D_d(u, mu, beta, v, vp, w)
-    (
-        u ^ 3 *
-        (bosedist(-2mu, beta) + fermidist(-1mu, beta)) *
-        (fermidist(-1mu, beta) - fermidist(mu, beta)) *
+
+    -(
         (
-            2 * mu ^ 2 +
-            2 * mu * v +
-            v ^ 2 +
-            2 * mu * vp +
-            vp ^ 2 +
-            2 * mu * w +
-            v * w +
-            vp * w - (u * (2mu + v + vp + w) * fermidist(-1mu, beta)) +
-            u * (2mu + v + vp + w) * fermidist(mu, beta)
+            u ^ 2 *
+            fermidist(-2mu, beta) *
+            (fermidist(-1mu, beta) - fermidist(mu, beta)) *
+            (
+                u ^ 2 * fermidist(-1mu, beta) - (u ^ 2 * fermidist(mu, beta)) - (
+                    (v - vp) * (
+                        u - (
+                            2 * ifelse(
+                                iszero(-2mu - v - vp - w),
+                                u ^ 2 * dfermidist(-1mu, beta),
+                                0,
+                            )
+                        )
+                    )
+                )
+            )
+        ) *
+        ((mu + vp) * (-1v + vp) * (mu + vp + w) * (-1 + 2 * fermidist(-2mu, beta))) ^ -1
+    ) +
+    (
+        fermidist(-1mu, beta) *
+        (
+            -(u ^ 2 * fermidist(-1mu, beta)) +
+            u ^ 2 * fermidist(mu, beta) +
+            (mu + v + w) *
+            (u - (2 * ifelse(iszero(-1mu - v), u ^ 2 * dfermidist(-1mu, beta), 0)))
+        ) *
+        (
+            -(u ^ 2 * fermidist(-1mu, beta)) +
+            u ^ 2 * fermidist(mu, beta) +
+            (mu + vp + w) * (
+                u - (2 * ifelse(iszero(mu + vp), u ^ 2 * dfermidist(-1mu, beta), 0)) +
+                ifelse(iszero(w), u ^ 2 * dfermidist(-1mu, beta), 0)
+            )
         )
-    ) * ((mu + v) * (mu + vp) * (mu + v + w) * (mu + vp + w)) ^ -1
+    ) * (w * (mu + v + w) * (mu + vp + w)) ^ -1 - (
+        (
+            fermidist(-1mu, beta) *
+            (
+                -(u ^ 2 * fermidist(-1mu, beta)) +
+                u ^ 2 * fermidist(mu, beta) +
+                (mu + v) *
+                (u - (2 * ifelse(iszero(-1mu - v - w), u ^ 2 * dfermidist(-1mu, beta), 0)))
+            ) *
+            (
+                -(u ^ 2 * fermidist(-1mu, beta)) +
+                u ^ 2 * fermidist(mu, beta) +
+                (mu + vp) * (
+                    u + ifelse(iszero(w), u ^ 2 * dfermidist(-1mu, beta), 0) -
+                    (2 * ifelse(iszero(mu + vp + w), u ^ 2 * dfermidist(-1mu, beta), 0))
+                )
+            )
+        ) * ((mu + v) * (mu + vp) * w) ^ -1
+    ) - (
+        (
+            u ^ 2 *
+            fermidist(-2mu, beta) *
+            (fermidist(-1mu, beta) - fermidist(mu, beta)) *
+            (
+                u ^ 2 * fermidist(-1mu, beta) - (u ^ 2 * fermidist(mu, beta)) +
+                (v - vp) * (
+                    u + ifelse(iszero(w), u ^ 2 * dfermidist(-1mu, beta), 0) - (
+                        2 *
+                        ifelse(iszero(2mu + v + vp + w), u ^ 2 * dfermidist(-1mu, beta), 0)
+                    )
+                )
+            )
+        ) * ((mu + v) * (v - vp) * (mu + v + w) * (-1 + 2 * fermidist(-2mu, beta))) ^ -1
+    )
 end

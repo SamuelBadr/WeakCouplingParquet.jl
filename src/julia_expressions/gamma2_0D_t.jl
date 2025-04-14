@@ -1,11 +1,13 @@
 function gamma2_0D_t(u, mu, beta, v, vp, w)
-    -(
-        (
-            u ^ 2 * (
-                (-2vp + w) * fermidist(-1mu, beta) +
-                (v + vp - w) * fermidist(-1mu + v - vp, beta) +
-                (-1v + vp) * fermidist(-1mu + v + vp - w, beta)
-            )
-        ) * ((v - vp) * (v + vp - w)) ^ -1
+
+    ifelse(
+        iszero(-1v + vp),
+        -(u ^ 2 * dfermidist(-1mu, beta)),
+        (u ^ 2 * (fermidist(-1mu, beta) - fermidist(-1mu + v - vp, beta))) * (v - vp) ^ -1,
+    ) + ifelse(
+        iszero(-1v - vp + w),
+        u ^ 2 * dfermidist(-1mu, beta),
+        (u ^ 2 * (-fermidist(-1mu, beta) + fermidist(-1mu + v + vp - w, beta))) *
+        (v + vp - w) ^ -1,
     )
 end
