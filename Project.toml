@@ -6,15 +6,11 @@ version = "0.1.0"
 [deps]
 Cubature = "667455a9-e2ce-5579-9412-b964f529a492"
 Integrals = "de52edbc-65ea-441a-8357-d3a637375a31"
-JuliaFormatter = "98e50ef6-434e-11e9-1051-2b60c6c9e899"
-MathLink = "18c93696-a329-5786-9845-8443133fa0b4"
 StaticArrays = "90137ffa-7385-5640-81b9-e52037218182"
 
 [compat]
 Cubature = "1.5.1"
 Integrals = "4.5.0"
-JuliaFormatter = "2.1.0"
-MathLink = "0.6.1"
 StaticArrays = "1.9.13"
 Test = "1.11.0"
 TestItemRunner = "1.1.0"
@@ -22,8 +18,8 @@ TestItems = "1.0.0"
 
 [extras]
 Test = "8dfed614-e22c-5e08-85e1-65c5234f0b40"
-TestItems = "1c621080-faea-4a02-84b6-bbd5e436b8fe"
 TestItemRunner = "f8b46487-2199-4994-9208-9a1283c18c0a"
+TestItems = "1c621080-faea-4a02-84b6-bbd5e436b8fe"
 
 [targets]
 test = ["Test", "TestItems", "TestItemRunner"]
