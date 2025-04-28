@@ -28,9 +28,9 @@ function make_julia_function(wolfram_path, out_path, function_name)
 end
 
 function make_julia_functions()
-    src_dir = joinpath(@__DIR__, "..", "src")
+    # src_dir = joinpath(@__DIR__, "..", "src")
     wolfram_expr_dir = joinpath(@__DIR__, "wolfram_expressions")
-    julia_function_dir = joinpath(src_dir, "julia_expressions")
+    julia_function_dir = joinpath(@__DIR__, "julia_expressions")
     if !isdir(julia_function_dir)
         mkpath(julia_function_dir)
     end
