@@ -1,5 +1,6 @@
 using MathLink
 using JuliaFormatter
+using Scratch
 
 function make_julia_function(wolfram_path, out_path, function_name)
     wolfram_expr_string = read(wolfram_path, String)
@@ -28,12 +29,8 @@ function make_julia_function(wolfram_path, out_path, function_name)
 end
 
 function make_julia_functions()
-    # src_dir = joinpath(@__DIR__, "..", "src")
     wolfram_expr_dir = joinpath(@__DIR__, "wolfram_expressions")
-    julia_function_dir = joinpath(@__DIR__, "julia_expressions")
-    if !isdir(julia_function_dir)
-        mkpath(julia_function_dir)
-    end
+    julia_function_dir = get_scratch!(Base.UUID("62b8c3c3-4004-406c-9797-34cb1d81b562"), "julia_functions")
     includes = String[]
     for in_file in readdir(wolfram_expr_dir)
         fun_name = splitext(in_file)[1]

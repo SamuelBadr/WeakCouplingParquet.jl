@@ -3,6 +3,7 @@ module WeakCouplingParquet
 using StaticArrays
 using Cubature
 using Integrals
+using Scratch
 
 @inline disp(k::AbstractVector) = -2 * sum(cospi, k)
 @inline disp(k::SVector{0}) = 0.0
@@ -12,7 +13,9 @@ using Integrals
 @inline dfermidist(x::Number, beta::Number) = complex(-0.25 * beta * sech(beta * x / 2)^2)
 @inline and(x, b) = x & b
 
-include("julia_expressions/_includes.jl")
+const julia_function_dir = @get_scratch!("julia_functions")
+include(joinpath(julia_function_dir, "_includes.jl"))
+# include("julia_expressions/_includes.jl")
 
 for fun in (:phi2_d, :phi2_m, :phi2_s, :phi2_t)
     @eval function $(fun)(dx, x, p)

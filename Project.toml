@@ -6,11 +6,13 @@ version = "0.1.0"
 [deps]
 Cubature = "667455a9-e2ce-5579-9412-b964f529a492"
 Integrals = "de52edbc-65ea-441a-8357-d3a637375a31"
+Scratch = "6c6a2e73-6563-6170-7368-637461726353"
 StaticArrays = "90137ffa-7385-5640-81b9-e52037218182"
 
 [compat]
 Cubature = "1.5.1"
 Integrals = "4.5.0"
+Scratch = "1.2.1"
 StaticArrays = "1.9.13"
 Test = "1.11.0"
 TestItemRunner = "1.1.0"
