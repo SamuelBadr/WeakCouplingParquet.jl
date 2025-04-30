@@ -71,3 +71,14 @@ end
         @test abs(part(err_t)) < max(abstol, reltol * abs(part(val_t)))
     end
 end
+
+@testitem "no nan value when v == vp and k != kp" begin
+    using StaticArrays
+
+    u = 0.3
+    beta = 0.5
+    val_d, err_d = WeakCouplingParquet.gamma2_d(u, u / 2, beta, 17 * im * pi / beta, 17 * im * pi / beta, -12 * im * pi / beta, SA[pi/2, pi/2], SA[0.0, 0.0], SA[0.0, 0.0])
+
+    @test !isnan(val_d)
+    @test !isnan(err_d)
+end
