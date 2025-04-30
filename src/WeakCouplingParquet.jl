@@ -5,7 +5,7 @@ using Cubature
 using Integrals
 using Scratch
 
-@inline disp(k::AbstractVector) = -2 * sum(cospi, k)
+@inline disp(k::AbstractVector) = -2 * sum(cos, k)
 @inline disp(k::SVector{0}) = 0.0
 
 @inline fermidist(x::Number, beta::Number) = 1 / (exp(beta * x) + 1)
@@ -67,7 +67,7 @@ for fun in (:full2_d, :full2_m, :full2_s, :full2_t, :gamma2_d, :gamma2_m, :gamma
         intfun = BatchIntegralFunction($fun, prototype)
 
         corner1 = @SVector fill(0.0, dim)
-        corner2 = @SVector fill(2.0, dim)
+        corner2 = @SVector fill(2pi, dim)
         domain = (corner1, corner2)
         p = (; u, mu, beta, v, vp, w, k, kp, q)
         prob = IntegralProblem(intfun, domain, p)
