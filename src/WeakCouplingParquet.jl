@@ -3,6 +3,7 @@ module WeakCouplingParquet
 using StaticArrays
 using Cubature
 using Integrals
+using CommonSubexpressions
 using Scratch
 
 @inline disp(k::AbstractVector) = -2 * sum(cos, k)
@@ -11,6 +12,9 @@ using Scratch
 @inline fermidist(x::Number, beta::Number) = 1 / (exp(beta * x) + 1)
 # dfermidist(x, beta) == ∂ fermidist(x, beta) / ∂ x
 @inline dfermidist(x::Number, beta::Number) = complex(-0.25 * beta * sech(beta * x / 2)^2)
+@inline bosedist(x::Number, beta::Number) = 1 / (exp(beta * x) - 1)
+# dbosedist(x, beta) == ∂ bosedist(x, beta) / ∂ x
+@inline dbosedist(x::Number, beta::Number) = complex(-0.25 * beta * csch(beta * x / 2)^2)
 @inline and(x, b) = x & b
 
 const julia_function_dir = @get_scratch!("julia_functions")
@@ -29,6 +33,10 @@ for fun in (:phi2_d, :phi2_m, :phi2_s, :phi2_t)
             k2 = x[inds2, i]
             k3 = x[inds3, i]
             res = $(fun)(u, mu, beta, v, vp, w, k, kp, q, k1, k2, k3)
+            if isnan(res)
+                @show (u, mu, beta, v, vp, w, k, kp, q, k1, k2, k3)
+                error("$((u, mu, beta, v, vp, w, k, kp, q, k1, k2, k3))")
+            end
             dx[1, i], dx[2, i] = real(res), imag(res)
         end
     end

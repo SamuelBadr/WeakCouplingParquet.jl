@@ -5,6 +5,7 @@ using Scratch
 function make_julia_function(wolfram_path, out_path, function_name)
     wolfram_expr_string = read(wolfram_path, String)
     wolfram_expr = MathLink.parseexpr(wolfram_expr_string)
+    @show wolfram_path function_name
     expr = W2JuliaExpr(wolfram_expr)
     expr = replace(string(expr), "+ -1 *" => "-", "-1 * " => "-", "+ -1" => "- ")
     if occursin("k2", expr) && occursin("k3", expr)
@@ -18,7 +19,7 @@ function make_julia_function(wolfram_path, out_path, function_name)
         normalization_constant = ""
     end
     function_string = """
-    function $(function_name)$(signature)
+    @cse function $(function_name)$(signature)
         $normalization_constant
         $expr
     end

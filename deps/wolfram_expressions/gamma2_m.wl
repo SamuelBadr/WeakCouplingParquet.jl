@@ -1,1 +1,1 @@
-(u*(-2*mu - v - vp - w + disp[k1] + disp[k - k1 + kp + q] + cnorm*u*(fermidist[-mu + disp[k1], beta] - fermidist[mu + v + vp + w - disp[k - k1 + kp + q], beta])))/(2*mu + v + vp + w - disp[k1] - disp[k - k1 + kp + q])
+-u + IfElse[IsZero[2*mu + v + vp + w - disp[k1] - disp[k - k1 + kp + q]], -(cnorm*u^2*dfermidist[-mu + disp[k1], beta]), (cnorm*u^2*(fermidist[-mu + disp[k1], beta] - fermidist[mu + v + vp + w - disp[k - k1 + kp + q], beta]))/(2*mu + v + vp + w - disp[k1] - disp[k - k1 + kp + q])]

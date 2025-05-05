@@ -1,1 +1,0 @@
-(u*(-2*mu - v - vp - w + u*fermidist[-mu, beta] - u*fermidist[mu + v + vp + w, beta]))/(2*mu + v + vp + w)
