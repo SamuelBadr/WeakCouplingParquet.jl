@@ -5,7 +5,6 @@ using Scratch
 function make_julia_function(wolfram_path, out_path, function_name)
     wolfram_expr_string = read(wolfram_path, String)
     wolfram_expr = MathLink.parseexpr(wolfram_expr_string)
-    @show wolfram_path function_name
     expr = W2JuliaExpr(wolfram_expr)
     expr = replace(string(expr), "+ -1 *" => "-", "-1 * " => "-", "+ -1" => "- ")
     if occursin("k2", expr) && occursin("k3", expr)

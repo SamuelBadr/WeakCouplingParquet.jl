@@ -34,7 +34,6 @@ for fun in (:phi2_d, :phi2_m, :phi2_s, :phi2_t)
             k3 = x[inds3, i]
             res = $(fun)(u, mu, beta, v, vp, w, k, kp, q, k1, k2, k3)
             if isnan(res)
-                @show (u, mu, beta, v, vp, w, k, kp, q, k1, k2, k3)
                 error("$((u, mu, beta, v, vp, w, k, kp, q, k1, k2, k3))")
             end
             dx[1, i], dx[2, i] = real(res), imag(res)
