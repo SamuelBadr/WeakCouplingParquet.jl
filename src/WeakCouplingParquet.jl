@@ -21,8 +21,6 @@ end
 
 @inline and(x, b) = x & b
 
-include("replace_iszero.jl")
-
 const julia_function_dir = @get_scratch!("julia_functions")
 include(joinpath(julia_function_dir, "_includes.jl"))
 
