@@ -9,12 +9,16 @@ using Scratch
 @inline disp(k::AbstractVector) = -2 * sum(cos, k)
 @inline disp(k::SVector{0}) = 0.0
 
-@inline fermidist(x::Number, beta::Number) = 1 / (exp(beta * x) + 1)
-# dfermidist(x, beta) == ∂ fermidist(x, beta) / ∂ x
-@inline dfermidist(x::Number, beta::Number) = complex(-0.25 * beta * sech(beta * x / 2)^2)
+@inline fermidist(x::Number, beta::Number) = complex(1 / (exp(beta * x) + 1))
+
+@inline function dfermidist(x::Number, beta::Number)
+    f = fermidist(x, beta)
+    beta * f * (f - 1)
+end
+
 @inline bosedist(x::Number, beta::Number) = 1 / (exp(beta * x) - 1)
-# dbosedist(x, beta) == ∂ bosedist(x, beta) / ∂ x
-@inline dbosedist(x::Number, beta::Number) = complex(-0.25 * beta * csch(beta * x / 2)^2)
+# @inline dbosedist(x::Number, beta::Number) = complex(-0.25 * beta * csch(beta * x / 2)^2)
+
 @inline and(x, b) = x & b
 
 const julia_function_dir = @get_scratch!("julia_functions")
@@ -40,7 +44,7 @@ for fun in (:phi2_d, :phi2_m, :phi2_s, :phi2_t)
         end
     end
 
-    @eval function $(fun)(u, mu, beta, v, vp, w, k::SVector{dim}, kp::SVector{dim}, q::SVector{dim}, alg=CubatureJLh(); kwargs...) where dim
+    @eval function $(fun)(u, mu, beta, v, vp, w, k::SVector{dim}, kp::SVector{dim}, q::SVector{dim}, alg=CubatureJLh(); kwargs...) where {dim}
         prototype = @SMatrix zeros(2, 0)
         intfun = BatchIntegralFunction($fun, prototype)
 
@@ -69,7 +73,7 @@ for fun in (:full2_d, :full2_m, :full2_s, :full2_t, :gamma2_d, :gamma2_m, :gamma
         end
     end
 
-    @eval function $(fun)(u, mu, beta, v, vp, w, k::SVector{dim}, kp::SVector{dim}, q::SVector{dim}, alg=CubatureJLh(); kwargs...) where dim
+    @eval function $(fun)(u, mu, beta, v, vp, w, k::SVector{dim}, kp::SVector{dim}, q::SVector{dim}, alg=CubatureJLh(); kwargs...) where {dim}
         prototype = @SMatrix zeros(2, 0)
         intfun = BatchIntegralFunction($fun, prototype)
 
@@ -83,13 +87,6 @@ for fun in (:full2_d, :full2_m, :full2_s, :full2_t, :gamma2_d, :gamma2_m, :gamma
         result = sol.u[1] + im * sol.u[2]
         residuum = sol.resid[1] + im * sol.resid[2]
         return result, residuum
-    end
-end
-
-for fun in (:phi2_d, :phi2_m, :phi2_s, :phi2_t, :full2_d, :full2_m, :full2_s, :full2_t, :gamma2_d, :gamma2_m, :gamma2_s, :gamma2_t)
-    str_fun = string(fun)
-    @eval function $(fun)(u, mu, beta, v, vp, w)
-        $(Symbol(str_fun[begin:end-1], "0D_", str_fun[end]))(u, mu, beta, v, vp, w)
     end
 end
 
