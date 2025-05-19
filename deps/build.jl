@@ -19,6 +19,7 @@ function make_julia_function(wolfram_path, out_path, function_name)
     end
     function_string = """
     @cse function $(function_name)$(signature)
+        atol = eps() # tolerance for detecting removable singularities
         $normalization_constant
         $expr
     end
