@@ -16,10 +16,7 @@ using Scratch
     beta * f * (f - 1)
 end
 
-@inline bosedist(x::Number, beta::Number) = 1 / (exp(beta * x) - 1)
-# @inline dbosedist(x::Number, beta::Number) = complex(-0.25 * beta * csch(beta * x / 2)^2)
-
-@inline and(x, b) = x & b
+@inline and(x, b) = x && b
 
 const julia_function_dir = @get_scratch!("julia_functions")
 include(joinpath(julia_function_dir, "_includes.jl"))
