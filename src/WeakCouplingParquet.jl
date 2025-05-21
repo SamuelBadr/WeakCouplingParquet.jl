@@ -17,8 +17,6 @@ using Scratch
     beta * f * (f - 1)
 end
 
-@inline bosedist(x::Number, beta::Number) = 1 / (exp(beta * x) - 1)
-
 @inline and(x, b) = x && b
 
 const julia_function_dir = @get_scratch!("julia_functions")
