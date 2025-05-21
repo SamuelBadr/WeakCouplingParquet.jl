@@ -9,7 +9,8 @@ using Scratch
 @inline disp(k::AbstractVector) = -2 * sum(cos, k)
 @inline disp(k::SVector{0}) = 0.0
 
-@inline fermidist(x::Number, beta::Number) = complex(1 / (exp(beta * x) + 1))
+@inline fermidist(x::Number, beta::Number) = fermidist(complex(x), beta)
+@inline fermidist(x::Complex, beta::Number) = @fastmath 1 / (exp(beta * x) + 1)
 
 @inline function dfermidist(x::Number, beta::Number)
     f = fermidist(x, beta)
@@ -17,12 +18,51 @@ using Scratch
 end
 
 @inline bosedist(x::Number, beta::Number) = 1 / (exp(beta * x) - 1)
-# @inline dbosedist(x::Number, beta::Number) = complex(-0.25 * beta * csch(beta * x / 2)^2)
 
-@inline and(x, b) = x & b
+@inline and(x, b) = x && b
 
 const julia_function_dir = @get_scratch!("julia_functions")
 include(joinpath(julia_function_dir, "_includes.jl"))
+
+function greensfunction(mu, v, k)
+    1 / (v - disp(k) + mu)
+end
+
+function chi0_ph(beta, mu, v, vp, w, k, kp, q)
+    if v ≈ vp && k ≈ kp
+        chi0_ph(beta, mu, v, w, k, q)
+    else
+        complex(0.0)
+    end
+end
+
+function chi0_ph(beta, mu, v, w, k, q)
+    greensfunction(mu, v, k) * greensfunction(mu, v + w, k + q)
+end
+
+function chi0_s(beta, mu, v, vp, w, k, kp, q)
+    if v ≈ vp && k ≈ kp
+        chi0_s(beta, mu, v, w, k, q)
+    else
+        complex(0.0)
+    end
+end
+
+function chi0_s(beta, mu, v, w, k, q)
+    -1 / 2 * greensfunction(mu, v, k) * greensfunction(mu, v + w, k + q)
+end
+
+function chi0_t(beta, mu, v, vp, w, k, kp, q)
+    if v ≈ vp && k ≈ kp
+        chi0_t(beta, mu, v, w, k, q)
+    else
+        complex(0.0)
+    end
+end
+
+function chi0_t(beta, mu, v, w, k, q)
+    1 / 2 * greensfunction(mu, v, k) * greensfunction(mu, v + w, k + q)
+end
 
 for fun in (:phi2_d, :phi2_m, :phi2_s, :phi2_t)
     @eval function $(fun)(dx, x, p)
