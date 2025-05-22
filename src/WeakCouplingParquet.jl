@@ -103,7 +103,7 @@ for fun in (:phi2_d, :phi2_m, :phi2_s, :phi2_t)
     #     return result, residuum
     # end
 
-    @eval function $(fun)(u, mu, beta, v, vp, w, k::SVector{dim}, kp::SVector{dim}, q::SVector{dim}, alg=CubatureJLh(); kwargs...) where {dim}
+    @eval function $(fun)(u, mu, beta, v, vp, w, k::SVector{dim}, kp::SVector{dim}, q::SVector{dim}; kwargs...) where {dim}
         inds1 = SVector(1:dim...) .+ 0dim
         inds2 = SVector(1:dim...) .+ 1dim
         inds3 = SVector(1:dim...) .+ 2dim
