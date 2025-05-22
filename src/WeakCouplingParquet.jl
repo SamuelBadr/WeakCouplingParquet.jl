@@ -1,8 +1,8 @@
 module WeakCouplingParquet
 
 using StaticArrays
-using Cubature
-using Integrals
+# using Cubature
+# using Integrals
 using CommonSubexpressions
 using Scratch
 
