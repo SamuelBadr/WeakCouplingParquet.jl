@@ -5,7 +5,7 @@ function integrate(::Val{D}, ::Type{T}, f; n=21, rule=gauss(n, 0.0, 2pi)) where 
 
     total = zero(T)
     for (x, w) in zip(Iterators.product(ntuple(_ -> xs, D)...), Iterators.product(ntuple(_ -> ws, D)...))
-        xvec = SVector(x)
+        xvec = SVector{D,Float64}(x)
         wprod = prod(w)
         total += wprod * f(xvec)
     end

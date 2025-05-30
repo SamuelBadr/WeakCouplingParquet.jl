@@ -15,6 +15,6 @@
 
     abstol = 1e-1
     reltol = 1e-1
-    val, err = WeakCouplingParquet.full2_m(u, mu, beta, v, vp, w, k, kp, q; abstol, reltol)
+    val = WeakCouplingParquet.full2_m(u, mu, beta, v, vp, w, k, kp, q)
     @test isfinite(val)
 end

@@ -56,4 +56,8 @@ end
     v = im * n * pi / beta
     vp = im * np * pi / beta
     w = im * m * pi / beta
+
+    k = SA{Float64}[]
+    kp = SA{Float64}[]
+    q = SA{Float64}[]
 end
