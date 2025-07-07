@@ -30,7 +30,7 @@ end
 
 function chi0_ph(beta, mu, v, vp, w, k, kp, q)
     if v ≈ vp && k ≈ kp
-        chi0_ph(beta, mu, v, w, k, q)
+        beta * chi0_ph(beta, mu, v, w, k, q)
     else
         complex(0.0)
     end
@@ -45,7 +45,7 @@ const chi0_m = chi0_ph
 
 function chi0_s(beta, mu, v, vp, w, k, kp, q)
     if v ≈ vp && k ≈ kp
-        chi0_s(beta, mu, v, w, k, q)
+        beta * chi0_s(beta, mu, v, w, k, q)
     else
         complex(0.0)
     end
@@ -57,7 +57,7 @@ end
 
 function chi0_t(beta, mu, v, vp, w, k, kp, q)
     if v ≈ vp && k ≈ kp
-        chi0_t(beta, mu, v, w, k, q)
+        beta * chi0_t(beta, mu, v, w, k, q)
     else
         complex(0.0)
     end
