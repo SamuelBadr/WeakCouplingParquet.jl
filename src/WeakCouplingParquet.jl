@@ -19,8 +19,11 @@ end
 
 @inline and(x, b) = x && b
 
-const julia_function_dir = @get_scratch!("julia_functions")
-include(joinpath(julia_function_dir, "_includes.jl"))
+# const julia_function_dir = @get_scratch!("julia_functions")
+# const julia_function_dir = joinpath(@__DIR__, "functions")
+# include(joinpath(julia_function_dir, "_includes.jl"))
+include("functions/_includes.jl")
+
 
 include("integration.jl")
 
